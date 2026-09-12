@@ -1,0 +1,178 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-arabic: "Tajawal", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  html {
+    direction: rtl;
+    scroll-behavior: smooth;
+    font-family: var(--font-arabic);
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    font-family: var(--font-arabic);
+  }
+}
+
+/* ============================================================
+   WELCOME OVERLAY ANIMATIONS
+   ============================================================ */
+
+/* Prevents page scroll while the welcome screen is open */
+body.welcome-locked {
+  overflow: hidden;
+}
+
+@keyframes welcomeFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes welcomeFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.welcome-enter { animation: welcomeFadeIn 0.45s ease-out both; }
+.welcome-exit  { animation: welcomeFadeOut 0.5s ease-in both; }
+
+/* Logo ring pulse + spin accent */
+@keyframes ringPulse {
+  0%   { transform: scale(0.85); opacity: 0.65; }
+  70%  { transform: scale(1.35); opacity: 0; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+.welcome-ring { animation: ringPulse 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite; }
+.welcome-ring-delay { animation-delay: 0.7s; }
+
+@keyframes spinSlow {
+  to { transform: rotate(360deg); }
+}
+.welcome-spin { animation: spinSlow 9s linear infinite; }
+
+/* Staggered Arabic word reveal (slides up + unblurs) */
+@keyframes wordUp {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.96);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+.welcome-word { animation: wordUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Shimmer sweep across the golden headline */
+@keyframes shimmer {
+  0%   { background-position: 200% 50%; }
+  100% { background-position: -200% 50%; }
+}
+.welcome-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    #fde68a 20%,
+    #ffffff 42%,
+    #fbbf24 58%,
+    #fde68a 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 3.2s linear infinite;
+}
+
+/* Progress bar fill */
+@keyframes barFill {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+.welcome-bar { animation: barFill 3.4s linear both; }
+
+/* Typewriter caret */
+@keyframes caretBlink {
+  0%, 45%  { opacity: 1; }
+  50%, 95% { opacity: 0; }
+}
+.caret { animation: caretBlink 1s steps(1, end) infinite; }
+
+/* Soft floating decorative orbs */
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(-18px, -14px) scale(1.06); }
+  66%      { transform: translate(14px, 12px) scale(0.96); }
+}
+.drift { animation: drift 13s ease-in-out infinite; }
+.drift-slow { animation: drift 19s ease-in-out infinite reverse; }
+
+/* Hero greeting badge pop */
+@keyframes popBadge {
+  0%   { transform: scale(0.7) translateY(10px); opacity: 0; }
+  60%  { transform: scale(1.06) translateY(0); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+.pop-badge { animation: popBadge 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* ============================================================
+   PRINT: only the official registration slip is printed
+   ============================================================ */
+@media print {
+  body {
+    background: #ffffff !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  .print-area,
+  .print-area * {
+    visibility: visible !important;
+  }
+
+  .print-area {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    margin: 0 !important;
+    width: 100%;
+    box-shadow: none !important;
+    border: 2px solid #0f172a !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY: reduce motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  .welcome-enter,
+  .welcome-exit,
+  .welcome-ring,
+  .welcome-ring-delay,
+  .welcome-spin,
+  .welcome-word,
+  .welcome-shimmer,
+  .welcome-bar,
+  .caret,
+  .drift,
+  .drift-slow,
+  .pop-badge {
+    animation: none !important;
+  }
+
+  .welcome-shimmer {
+    color: #fbbf24;
+    -webkit-text-fill-color: #fbbf24;
+  }
+}
